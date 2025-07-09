@@ -146,6 +146,14 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return <AuthGuard>{children}</AuthGuard>;
 };
 
+// External dashboard redirect component
+const ExternalDashboardRedirect = () => {
+  useEffect(() => {
+    window.location.replace("https://cerulean-hotteok-d35763.netlify.app/");
+  }, []);
+  return null;
+};
+
 const App = () => {
   return (
     <ErrorBoundary>
@@ -175,7 +183,7 @@ const App = () => {
                     path="/"
                     element={
                       <ProtectedRoute>
-                        <Dashboard />
+                        <ExternalDashboardRedirect />
                       </ProtectedRoute>
                     }
                   />
@@ -183,7 +191,7 @@ const App = () => {
                     path="/dashboard"
                     element={
                       <ProtectedRoute>
-                        <Dashboard />
+                        <ExternalDashboardRedirect />
                       </ProtectedRoute>
                     }
                   />
