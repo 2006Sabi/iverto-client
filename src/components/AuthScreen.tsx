@@ -8,6 +8,8 @@ import { Spinner } from "@/components/ui/loading";
 import { dataInitializer } from "@/services/dataInitializer";
 import { useSendOTPMutation, useVerifyOTPMutation } from "@/store/api/authApi";
 import { OtpVerification } from "./OtpVerification";
+import { TbLockPassword } from "react-icons/tb";
+import { FiEye, FiEyeOff } from "react-icons/fi";
 
 // Color palette
 const palette = {
@@ -55,6 +57,7 @@ export const AuthScreen = () => {
 
   const signUpNameInputRef = useRef<HTMLInputElement>(null);
   const loginEmailInputRef = useRef<HTMLInputElement>(null);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
 
   // Login error handling
   useEffect(() => {
@@ -292,44 +295,156 @@ export const AuthScreen = () => {
         minHeight: "100vh",
         width: "100vw",
         background: `url('/src/background.jpg') center center / cover no-repeat fixed`,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: 0,
+        margin: 0,
       }}
     >
-      <div className={`auth-container${isSignUp ? " right-panel-active" : ""}`}>
-        {" "}
-        {/* Main container */}
+      <div
+        className={`auth-container${isSignUp ? " right-panel-active" : ""}`}
+        style={{
+          background: `url('/src/bg.jpg') center center / cover no-repeat`,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          borderRadius: "10px",
+          boxShadow:
+            "0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            marginTop: 32,
+            marginBottom: 26,
+          }}
+        >
+          <img
+            src="https://www.iverto.ai/static/media/logo.aef148084a7a5d79ad65.png"
+            alt="Iverto Logo"
+            style={{ width: 120, height: "auto", marginBottom: 16 }}
+          />
+        </div>
         {/* Sign Up Panel */}
         <div className="form-container sign-up-container">
           <form onSubmit={handleSendOTP}>
-            <h1>Create Account</h1>
-            <input
-              ref={signUpNameInputRef}
-              type="text"
-              placeholder="Name"
-              value={regName}
-              onChange={(e) => setRegName(e.target.value)}
-              disabled={isSendingOTP}
-              required
-              autoComplete="username"
-            />
-            <input
-              type="text"
-              placeholder="Company Name"
-              value={regCompanyName}
-              onChange={(e) => setRegCompanyName(e.target.value)}
-              disabled={isSendingOTP}
-              required
-              autoComplete="organization"
-            />
-            <input
-              type="email"
-              placeholder="Email"
-              value={regEmail}
-              onChange={(e) => setRegEmail(e.target.value)}
-              disabled={isSendingOTP}
-              required
-              autoComplete="email"
-            />
-            <div style={{ position: "relative", width: "100%" }}>
+            <h1 style={{ fontWeight: "bold", fontSize: 28, marginBottom: 8 }}>
+              Create Account
+            </h1>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <svg width="28" height="28" fill="black" viewBox="2 -5 24 24">
+                  <path d="M12 12c2.7 0 8 1.34 8 4v2H4v-2c0-2.66 5.3-4 8-4zm0-2a4 4 0 100-8 4 4 0 000 8z" />
+                </svg>
+              </span>
+              <input
+                ref={signUpNameInputRef}
+                type="text"
+                placeholder="Name"
+                value={regName}
+                onChange={(e) => setRegName(e.target.value)}
+                disabled={isSendingOTP}
+                required
+                autoComplete="username"
+                style={{
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
+              />
+            </div>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <svg width="28" height="28" fill="black" viewBox="2 -2 24 24">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                placeholder="Company Name"
+                value={regCompanyName}
+                onChange={(e) => setRegCompanyName(e.target.value)}
+                disabled={isSendingOTP}
+                required
+                autoComplete="organization"
+                style={{
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
+              />
+            </div>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <svg width="28" height="28" fill="black" viewBox="2 -5 24 24">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </span>
+              <input
+                type="email"
+                placeholder="Email"
+                value={regEmail}
+                onChange={(e) => setRegEmail(e.target.value)}
+                disabled={isSendingOTP}
+                required
+                autoComplete="email"
+                style={{
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
+              />
+            </div>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <TbLockPassword
+                  size={28}
+                  color="black"
+                  style={{ verticalAlign: "middle" }}
+                />
+              </span>
               <input
                 type={showRegPassword ? "text" : "password"}
                 placeholder="Password"
@@ -338,58 +453,29 @@ export const AuthScreen = () => {
                 disabled={isSendingOTP}
                 required
                 autoComplete="new-password"
-                style={{ width: "100%", paddingRight: "40px" }}
+                style={{
+                  width: "100%",
+                  paddingRight: "40px",
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
               />
-              <button
-                type="button"
-                tabIndex={-1}
+              <span
                 onClick={() => setShowRegPassword((v) => !v)}
                 style={{
                   position: "absolute",
-                  right: 8,
-                  top: "50%",
-                  transform: "translateY(-50%)",
-                  background: "none",
-                  border: "none",
-                  color: palette.primary,
+                  right: 20,
+                  top: 19,
                   cursor: "pointer",
+                  color: "black",
                 }}
+                tabIndex={0}
                 aria-label={showRegPassword ? "Hide password" : "Show password"}
               >
-                {showRegPassword ? (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="24"
-                    fill="none"
-                    viewBox="0 0 12 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13.875 18.825A10.05 10.05 0 0112 19c-5 0-9.27-3.11-10.5-7.5a10.05 10.05 0 012.876-4.425m2.122-1.768A9.956 9.956 0 0112 5c5 0 9.27 3.11 10.5 7.5a9.956 9.956 0 01-4.198 5.568M15 12a3 3 0 11-6 0 3 3 0 016 0zm-7.5 7.5l15-15"
-                    />
-                  </svg>
-                ) : (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M1.5 12C2.73 7.61 7 4.5 12 4.5s9.27 3.11 10.5 7.5c-1.23 4.39-5.5 7.5-10.5 7.5S2.73 16.39 1.5 12zm10.5 3a3 3 0 100-6 3 3 0 000 6z"
-                    />
-                  </svg>
-                )}
-              </button>
+                {showRegPassword ? <FiEyeOff size={22} /> : <FiEye size={22} />}
+              </span>
             </div>
             {regError && <div className="error-message">{regError}</div>}
             <button
@@ -401,60 +487,192 @@ export const AuthScreen = () => {
                 !regPassword ||
                 !regCompanyName
               }
+              style={{
+                fontWeight: "bold",
+                fontSize: 16,
+                letterSpacing: 1,
+                marginTop: 8,
+                borderRadius: 20,
+                boxShadow: "0 2px 8px rgba(205,4,71,0.08)",
+                transition: "background 0.2s",
+                background: "#cd0447",
+                color: "#fff",
+              }}
             >
               {isSendingOTP ? <span>Sending OTP...</span> : "Register"}
             </button>
+            <div style={{ marginTop: 18, textAlign: "center", fontSize: 15 }}>
+              Already have an account?{" "}
+              <span
+                style={{
+                  color: "#cd0447",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => {
+                  setIsSignUp(false);
+                  setRegStep("form");
+                }}
+              >
+                Login
+              </span>
+            </div>
           </form>
         </div>
         {/* Sign In Panel */}
         <div className="form-container sign-in-container">
           <form onSubmit={handleLoginSubmit}>
-            <h1>Sign in</h1>
-            <div className="social-container">
-              <a href="#" className="social">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="social">
-                <i className="fab fa-google-plus-g"></i>
-              </a>
-              <a href="#" className="social">
-                <i className="fab fa-linkedin-in"></i>
-              </a>
+            <h1
+              style={{
+                fontWeight: "bold",
+                fontSize: 38,
+                marginBottom: 8,
+                marginTop: 4,
+              }}
+            >
+              Sign in
+            </h1>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <svg width="28" height="28" fill="black " viewBox="2 -5 24 24">
+                  <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
+                </svg>
+              </span>
+              <input
+                ref={loginEmailInputRef}
+                type="email"
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                required
+                autoComplete="email"
+                style={{
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
+              />
             </div>
-            <span>or use your account</span>
-            <input
-              ref={loginEmailInputRef}
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              disabled={isLoading}
-              required
-              autoComplete="email"
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              disabled={isLoading}
-              required
-              autoComplete="current-password"
-            />
-            <a href="#">Forgot your password?</a>
+            <div
+              style={{ position: "relative", width: "100%", marginBottom: 12 }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  left: 12,
+                  top: 14,
+                  color: "#cd0447",
+                }}
+              >
+                <TbLockPassword
+                  size={28}
+                  color="black"
+                  style={{ verticalAlign: "middle" }}
+                />
+              </span>
+              <input
+                type={showLoginPassword ? "text" : "password"}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                required
+                autoComplete="current-password"
+                style={{
+                  paddingLeft: 36,
+                  borderRadius: 8,
+                  boxShadow: "0 1px 4px rgba(0,0,0,0.06)",
+                  border: "1px solid #eee",
+                }}
+              />
+              <span
+                onClick={() => setShowLoginPassword((v) => !v)}
+                style={{
+                  position: "absolute",
+                  right:17,
+                  top: 19,
+                  cursor: "pointer",
+                  color: "black",
+                }}
+                tabIndex={0}
+                aria-label={
+                  showLoginPassword ? "Hide password" : "Show password"
+                }
+              >
+                {showLoginPassword ? (
+                  <FiEyeOff size={22} />
+                ) : (
+                  <FiEye size={22} />
+                )}
+              </span>
+            </div>
             {loginError && <div className="error-message">{loginError}</div>}
-            <button type="submit" disabled={isLoading || !email || !password}>
+            <button
+              type="submit"
+              disabled={isLoading || !email || !password}
+              style={{
+                fontWeight: "bold",
+                fontSize: 16,
+                letterSpacing: 1,
+                marginTop: 8,
+                borderRadius: 20,
+                boxShadow: "0 2px 8px rgba(205,4,71,0.08)",
+                transition: "background 0.2s",
+                background: "#cd0447",
+                color: "#fff",
+              }}
+            >
               {isLoading ? <span>Signing in...</span> : "Sign In"}
             </button>
+            <div style={{ marginTop: 18, textAlign: "center", fontSize: 15 }}>
+              Create account?{" "}
+              <span
+                style={{
+                  color: "#cd0447",
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  textDecoration: "underline",
+                }}
+                onClick={() => {
+                  setIsSignUp(true);
+                }}
+              >
+                Register
+              </span>
+            </div>
           </form>
         </div>
         {/* Overlay Panel */}
         <div className="overlay-container">
           <div className="overlay">
             <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>
-                To keep connected with us please login with your personal info
+              <img
+                src="https://www.iverto.ai/static/media/logo.aef148084a7a5d79ad65.png"
+                alt="Iverto Logo"
+                style={{
+                  width: 180,
+                  height: "auto",
+                  marginBottom: 26,
+                  marginTop: 5,
+                }}
+              />
+              <h1 style={{ fontWeight: 750, fontSize: 32, marginBottom: 8 }}>
+                Join Iverto.ai
+              </h1>
+              <p style={{ fontWeight: 500, fontSize: 18, marginBottom: 18 }}>
+                where cameras become intelligent eyes.
               </p>
               <button
                 className="ghost"
@@ -463,12 +681,26 @@ export const AuthScreen = () => {
                   setRegStep("form");
                 }}
               >
-                Sign In
+                Login
               </button>
             </div>
             <div className="overlay-panel overlay-right">
-              <h1>Hello, Friend!</h1>
-              <p>Enter your personal details and start journey with us</p>
+              <img
+                src="https://www.iverto.ai/static/media/logo.aef148084a7a5d79ad65.png"
+                alt="Iverto Logo"
+                style={{
+                  width: 180,
+                  height: "auto",
+                  marginBottom: 26,
+                  marginTop: 5,
+                }}
+              />
+              <h1 style={{ fontWeight: 750, fontSize: 32, marginBottom: 8 }}>
+                Your eyes on everything
+              </h1>
+              <p style={{ fontWeight: 500, fontSize: 18, marginBottom: 18 }}>
+                powered by Iverto.ai.
+              </p>
               <button
                 className="ghost"
                 onClick={() => {
@@ -478,7 +710,7 @@ export const AuthScreen = () => {
                   }, 400); // Wait for panel animation
                 }}
               >
-                Sign Up
+                Register
               </button>
             </div>
           </div>
@@ -487,7 +719,7 @@ export const AuthScreen = () => {
         <style>{`
           .auth-container {
             /* background: linear-gradient(135deg, #cd0447 0%, #fff 100%); */
-            background: rgba(255,255,255,0.5);
+            /* The background is now set inline via style prop for bg.jpg */
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border-radius: 10px;
@@ -552,7 +784,7 @@ export const AuthScreen = () => {
             transform: translateX(-100%);
           }
           .overlay {
-            background: url('/background.jpg') center center / cover no-repeat fixed;
+            background: url('/src/bg.jpg') center center / cover no-repeat fixed;
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
