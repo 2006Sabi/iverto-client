@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { RootState } from "../index";
 import { config } from "@/config/environment";
+import { addCORSHeadersToRequest } from "@/utils/corsUtils";
+import { handleCORSError } from "@/utils/corsMiddleware";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: config.apiUrl,
@@ -12,7 +14,12 @@ const baseQuery = fetchBaseQuery({
       headers.set("authorization", `Bearer ${token}`);
     }
 
-    headers.set("Content-Type", "application/json");
+    // Set CORS headers using utility function
+    const corsHeaders = addCORSHeadersToRequest().headers as Headers;
+    corsHeaders.forEach((value, key) => {
+      headers.set(key, value);
+    });
+
     return headers;
   },
 });
@@ -44,6 +51,22 @@ const baseQueryWithReauth = async (args: any, api: any, extraOptions: any) => {
     } else {
       api.dispatch({ type: "auth/logout" });
     }
+  }
+
+  // Handle CORS errors
+  if (
+    result?.error?.status === 0 ||
+    result?.error?.status === 403 ||
+    result?.error?.status === 405
+  ) {
+    const corsError = handleCORSError(result.error);
+    console.warn(`CORS error for ${args.url}:`, corsError);
+    return {
+      error: {
+        status: result.error.status,
+        data: { message: corsError.error },
+      },
+    };
   }
 
   // Handle 500 Internal Server Error - log but don't break the app
