@@ -92,16 +92,13 @@ export const LiveCameraView = () => {
     setSelectedCameras((prev) => prev.filter((id) => id !== cameraId));
   };
 
-  const getStreamUrl = (camera: { _id: string; httpUrl?: string }) => {
-    // Use the httpUrl from camera data if available
-    if (camera.httpUrl && camera.httpUrl.includes("{camId}")) {
-      // Replace placeholder {camId} with actual camera ID
-      return camera.httpUrl.replace("{camId}", camera._id);
+  const getStreamUrl = (camera: { _id: string; streamUrl?: string }) => { 
+    if (camera.streamUrl && camera.streamUrl.includes("{camId}")) { 
+      return camera.streamUrl.replace("{camId}", camera._id);
     }
-    if (camera.httpUrl) {
-      return camera.httpUrl;
-    }
-    // No fallback URL - return empty string if no httpUrl is available
+    if (camera.streamUrl) {
+      return camera.streamUrl;
+    } 
     return "";
   };
 
@@ -117,7 +114,7 @@ export const LiveCameraView = () => {
               status: "Online" as const,
               created_at: new Date().toISOString(),
               url: "",
-              httpUrl: localIp ? `http://${localIp}:8080/stream/${id}` : "",
+              streamUrl: localIp ? `http://${localIp}:8080/stream/${id}` : "",
               anomalyEntities: [],
             }
         )

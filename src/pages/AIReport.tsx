@@ -391,45 +391,43 @@ const AIReport: React.FC = () => {
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#cd0447]"></div>
             </div>
           ) : (
-            <div className="max-w-[101%] overflow-hidden">
-              <ResponsiveContainer width="101%" height={300} className="text-xs sm:text-sm">
-                <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="time" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line
-                    type="monotone"
-                    dataKey="productivity"
-                    stroke="#cd0447"
-                    strokeWidth={2}
-                    name="Productivity Score"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="workingTime"
-                    stroke="#10b981"
-                    strokeWidth={2}
-                    name="Working Time (min)"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="awayTime"
-                    stroke="#f59e0b"
-                    strokeWidth={2}
-                    name="Away Time (min)"
-                  />
-                  <Line
-                    type="monotone"
-                    dataKey="idealTime"
-                    stroke="#3b82f6"
-                    strokeWidth={2}
-                    name="Ideal Time (min)"
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            </div>
+            <ResponsiveContainer width="101%" height={300} className="text-xs sm:text-sm">
+              <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="time" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Line
+                  type="monotone"
+                  dataKey="productivity"
+                  stroke="#cd0447"
+                  strokeWidth={2}
+                  name="Productivity Score"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="workingTime"
+                  stroke="#10b981"
+                  strokeWidth={2}
+                  name="Working Time (min)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="awayTime"
+                  stroke="#f59e0b"
+                  strokeWidth={2}
+                  name="Away Time (min)"
+                />
+                <Line
+                  type="monotone"
+                  dataKey="idealTime"
+                  stroke="#3b82f6"
+                  strokeWidth={2}
+                  name="Ideal Time (min)"
+                />
+              </LineChart>
+            </ResponsiveContainer>
           )}
         </CardContent>
       </Card>
@@ -729,11 +727,11 @@ const AIReport: React.FC = () => {
                         </CardHeader>
                         <CardContent>
                           <CameraStream
-                            streamUrl={selectedCamera.httpUrl || selectedCamera.url}
+                            streamUrl={selectedCamera.aiStreamUrl || selectedCamera.url}
                             cameraName={selectedCamera.name}
                             isOnline={selectedCamera.status === "Online"}
                             localIp={null}
-                            useImgTag={(selectedCamera.httpUrl || selectedCamera.url).includes('/stream?camId=')}
+                            useImgTag={(selectedCamera.aiStreamUrl || selectedCamera.url).includes('/stream?camId=')}
                           />
                         </CardContent>
                       </Card>

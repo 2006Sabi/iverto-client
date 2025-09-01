@@ -19,9 +19,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Times New Roman", "Times", "serif"],
-        serif: ["Times New Roman", "Times", "serif"],
-        mono: ["Times New Roman", "Times", "serif"],
+        sans: ["Poppins", "sans-serif"],
+        serif: ["Poppins", "serif"],
+        mono: ["Poppins", "monospace"],
       },
       gridTemplateColumns: {
         "24": "repeat(24, minmax(0, 1fr))",

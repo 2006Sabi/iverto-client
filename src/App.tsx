@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import "@fontsource/poppins";
 import { Provider } from "react-redux";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { CustomToastProvider } from "@/components/ui/custom-toaster";

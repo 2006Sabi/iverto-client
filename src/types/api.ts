@@ -58,6 +58,7 @@ export interface Camera {
   location: string;
   url: string;
   httpUrl?: string; // Optional field for HTTP stream URL
+  aiStreamUrl?: string; // Optional field for AI-processed stream URL
   status: "Online" | "Offline";
   anomalyEntities: string[]; // Array of anomaly entity IDs
   created_at: string;
@@ -69,6 +70,7 @@ export interface CreateCameraRequest {
   location: string;
   url: string;
   httpUrl?: string; // Optional field for HTTP stream URL
+  aiStreamUrl?: string; // Optional field for AI-processed stream URL
   anomalyEntities: string[]; // Array of anomaly entity IDs to monitor
 }
 
@@ -77,6 +79,7 @@ export interface UpdateCameraRequest {
   location?: string;
   url?: string;
   httpUrl?: string; // New field for HTTP stream URL
+  aiStreamUrl?: string; // Optional field for AI-processed stream URL
   status?: "Online" | "Offline";
 }
 

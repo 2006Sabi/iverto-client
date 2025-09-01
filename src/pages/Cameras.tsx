@@ -7,6 +7,12 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { AddCameraDialog } from "@/components/AddCameraDialog";
 import { DataRefreshButton } from "@/components/DataRefreshButton";
 import {
@@ -131,6 +137,7 @@ const Cameras = () => {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [cameraToDelete, setCameraToDelete] = useState<Camera | null>(null);
   const [confirmInput, setConfirmInput] = useState("");
+  const [aiOptions, setAiOptions] = useState<Record<string, string | null>>({});
 
   // Use the optimized camera data hook
   const {
@@ -238,6 +245,29 @@ const Cameras = () => {
     [refreshCameras]
   );
 
+  const handleAiOptionSelect = useCallback(
+    (cameraId: string, option: string) => {
+      setAiOptions((prev) => ({
+        ...prev,
+        [cameraId]: option,
+      }));
+
+      // Placeholder for AI streaming logic
+      // TODO: Implement actual AI streaming based on selected option
+      console.log(`AI option "${option}" selected for camera ${cameraId}`);
+
+      // Show notification
+      dispatch(
+        addNotification({
+          type: "info",
+          title: "AI Option Selected",
+          message: `AI streaming mode set to "${option}" for camera`,
+        })
+      );
+    },
+    [dispatch]
+  );
+
   const localIp = useLocalIp();
 
   // Memoized camera grid to prevent unnecessary re-renders
@@ -271,30 +301,38 @@ const Cameras = () => {
                   </div>
                 </div>
               </div>
-              <Badge
-                variant={isOnline ? "default" : "destructive"}
-                className={`sleek-badge border-0 text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1 rounded-none ${
-                  isOnline
-                    ? "bg-green-500/20 text-green-700 border border-green-200/50 backdrop-blur-sm"
-                    : "bg-red-500/20 text-red-700 border border-red-200/50 backdrop-blur-sm"
-                }`}
-              >
-                {isOnline ? (
-                  <Wifi className="h-3 w-3 mr-1" />
-                ) : (
-                  <WifiOff className="h-3 w-3 mr-1" />
-                )}
-                <span className="hidden sm:inline">
-                  {isOnline ? "Online" : "Offline"}
-                </span>
-              </Badge>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    className="sleek-badge border-0 text-xs sm:text-sm flex-shrink-0 px-2 sm:px-3 py-1 rounded-none bg-blue-500/20 text-blue-700 border border-blue-200/50 backdrop-blur-sm hover:bg-blue-500/30 transition-colors"
+                  >
+                    + AI
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" side="right" className="w-40">
+                  <DropdownMenuItem
+                    onClick={() => handleAiOptionSelect(camera._id, "away")}
+                    className="cursor-pointer"
+                  >
+                    Away
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => handleAiOptionSelect(camera._id, "more than 1")}
+                    className="cursor-pointer"
+                  >
+                    More than 1
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 lg:p-6 relative z-10">
             {/* Live Video Stream */}
             <div className="aspect-video bg-black/80 rounded-lg overflow-hidden flex items-center justify-center mb-2">
               {isOnline ? (
-                camera.httpUrl ? (
+                camera.aiStreamUrl ? (
                   streamErrorIds.includes(camera._id) ? (
                     <div className="flex flex-col items-center justify-center w-full h-full text-gray-400">
                       <WifiOff className="h-8 w-8 mb-2" />
@@ -303,7 +341,7 @@ const Cameras = () => {
                   ) : (
                     <img
                       className="w-full h-full object-cover"
-                      src={camera.httpUrl}
+                      src={camera.aiStreamUrl}
                       alt="Live Camera Stream"
                       onLoad={() => handleStreamLoad(camera._id)}
                       onError={(e) => {
@@ -372,22 +410,22 @@ const Cameras = () => {
                 </Button>
               </div>
 
-              {/* New: Display httpUrl if present */}
-              {camera.httpUrl && (
+              {/* New: Display aiStreamUrl if present */}
+              {camera.aiStreamUrl && (
                 <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm">
                   <div className="p-1.5 sm:p-2 rounded-none bg-green-50/80 backdrop-blur-sm flex-shrink-0 border border-green-100/50">
                     <LinkIcon className="h-3 w-3 sm:h-4 sm:w-4 text-green-600" />
                   </div>
                   <span className="text-gray-700 truncate font-mono text-xs flex-1">
-                    {camera.httpUrl.length > (isMobile ? 15 : 25)
-                      ? `${camera.httpUrl.substring(0, isMobile ? 15 : 25)}...`
-                      : camera.httpUrl}
+                    {camera.aiStreamUrl.length > (isMobile ? 15 : 25)
+                      ? `${camera.aiStreamUrl.substring(0, isMobile ? 15 : 25)}...`
+                      : camera.aiStreamUrl}
                   </span>
                   <Button
                     variant="ghost"
                     size="icon"
                     className="h-6 w-6 sm:h-8 sm:w-8 text-gray-500 hover:text-[#cd0447] hover:bg-[#cd0447]/10 transition-colors flex-shrink-0 rounded-none"
-                    onClick={() => handleCopyUrl(camera.httpUrl)}
+                    onClick={() => handleCopyUrl(camera.aiStreamUrl)}
                   >
                     <Copy className="h-3 w-3 sm:h-4 sm:w-4" />
                   </Button>
@@ -406,20 +444,6 @@ const Cameras = () => {
                 <Eye className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                 <span className="hidden sm:inline">View</span>
               </Button>
-
-              {/* Test Stream Button - Only show for offline cameras or when httpUrl is available */}
-              {(camera.status === "Offline" || camera.httpUrl) && (
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="h-8 w-8 sm:h-9 sm:w-9 bg-white/80 hover:bg-green-50/90 border-gray-200/50 hover:border-green-500 text-gray-700 hover:text-green-600 transition-all duration-200 backdrop-blur-sm rounded-none"
-                  title="Test Stream"
-                  onClick={() => setTestCamera(camera)}
-                >
-                  <Play className="h-3 w-3 sm:h-4 sm:w-4" />
-                </Button>
-              )}
-
               <Button
                 variant="outline"
                 size="sm"
@@ -464,6 +488,8 @@ const Cameras = () => {
     handleStreamError,
     handleStreamLoad,
     streamErrorIds,
+    handleAiOptionSelect,
+    aiOptions,
   ]);
 
   // Loading state
